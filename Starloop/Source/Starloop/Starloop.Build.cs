@@ -14,7 +14,13 @@ public class Starloop : ModuleRules
 			"Engine", 
 			"InputCore", 
 			"InteractionModule",
-			"NameModule"
+			"NameModule",
+			"UMG"
+		});
+
+		PrivateDependencyModuleNames.AddRange(new string[] { 
+			"Slate", 
+			"SlateCore" 
 		});
 	}
 }
