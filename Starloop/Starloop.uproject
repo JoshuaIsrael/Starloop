@@ -1,0 +1,21 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.27",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Starloop",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "InteractionModule",
+			"Type": "Runtime"
+		},
+		{
+			"Name": "NameModule",
+			"Type": "Runtime"
+		}
+	]
+}
