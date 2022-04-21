@@ -25,4 +25,6 @@ void UNameComponent::Server_SetName_Implementation(FName NewName)
 void UNameComponent::SetName(FName NewName)
 {
     Name = NewName;
+
+    OnSetName(NewName);
 }

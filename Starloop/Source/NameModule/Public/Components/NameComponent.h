@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetName(FName NewName);
 
+	    UFUNCTION(BlueprintImplementableEvent)
+	    void OnSetName(FName NewName);
+
 protected:
 
 	UPROPERTY(Replicated, BlueprintReadOnly)
