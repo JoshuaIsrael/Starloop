@@ -27,11 +27,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* Enter;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SetPlayerName();
-
-	    UFUNCTION(BlueprintImplementableEvent)
-	    void OnSetPlayerName(FName NewName);
 
 protected:
 

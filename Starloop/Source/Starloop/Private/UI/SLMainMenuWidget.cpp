@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
 #include "Components/NameComponent.h"
+#include "Game/SLGameInstance.h"
 #include "GameFramework/PlayerState.h"
 
 void USLMainMenuWidget::OnConstruct_Implementation()
@@ -15,7 +16,7 @@ void USLMainMenuWidget::OnConstruct_Implementation()
     Enter->OnPressed.AddDynamic(this, &USLMainMenuWidget::SetPlayerName);
 }
 
-void USLMainMenuWidget::SetPlayerName()
+void USLMainMenuWidget::SetPlayerName_Implementation()
 {
     UNameComponent* NameComponent = GetOwningPlayerState()->FindComponentByClass<UNameComponent>();
 
@@ -24,7 +25,14 @@ void USLMainMenuWidget::SetPlayerName()
     {
         NameComponent->Server_SetName(FName(*Name->GetText().ToString()));
 
-        OnSetPlayerName(NameComponent->GetName());
+        USLGameInstance* SLGameInstance = Cast<USLGameInstance>(GetGameInstance());
+
+        if(!SLGameInstance)
+        {
+            return;
+        }
+
+        SLGameInstance->SetCharacter(GetOwningPlayer());
     }
 }
 
