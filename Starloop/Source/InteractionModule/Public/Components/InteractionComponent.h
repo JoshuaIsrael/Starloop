@@ -6,6 +6,9 @@
 #include "Components/ActorComponent.h"
 #include "InteractionComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBindInteractEvents, AActor*, ActorToInteract);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteract, AActor*, ActorToInteract);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INTERACTIONMODULE_API UInteractionComponent : public UActorComponent
 {
@@ -25,6 +28,18 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interact")
 	void Interact();
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "Interact")
+	void Multicast_TakeOwnership(AActor* Actor);
+
+	UFUNCTION(BlueprintCallable, Category = "Interact")
+	void TakeOwnership(AActor* Actor);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnInteract OnInteract;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnBindInteractEvents OnBindInteractionEvents;
 
 protected:
 

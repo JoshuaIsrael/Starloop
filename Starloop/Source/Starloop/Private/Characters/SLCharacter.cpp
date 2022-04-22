@@ -49,6 +49,13 @@ ASLCharacter::ASLCharacter()
 	Interaction = CreateDefaultSubobject<UInteractionComponent>(TEXT("Interaction")); 
 }
 
+void ASLCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+
+	Interaction->OnBindInteractionEvents.AddDynamic(this, &ASLCharacter::BindInteractionEvents);
+}
+
 void ASLCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);

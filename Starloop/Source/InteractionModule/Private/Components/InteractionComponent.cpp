@@ -66,8 +66,24 @@ void UInteractionComponent::Interact()
 	    return;
 	}
 
+	Multicast_TakeOwnership(ActorToInteract);
+
 	if(ActorToInteract->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
 	{
+		OnBindInteractionEvents.Broadcast(ActorToInteract);
+
 		IInteractableInterface::Execute_OnInteract(ActorToInteract);
+
+		OnInteract.Broadcast(ActorToInteract);
 	}
+}
+
+void UInteractionComponent::Multicast_TakeOwnership_Implementation(AActor* Actor)
+{
+	TakeOwnership(Actor);
+}
+
+void UInteractionComponent::TakeOwnership(AActor* Actor)
+{
+	Actor->SetOwner(GetOwner());
 }

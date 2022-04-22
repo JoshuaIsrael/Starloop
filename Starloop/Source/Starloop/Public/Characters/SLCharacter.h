@@ -22,6 +22,10 @@ public:
 	// Sets default values for this character's properties
 	ASLCharacter();
 
+	//~ Begin AActor Interface.
+	virtual void BeginPlay() override;
+	//~ End AActor Interface
+
 	//~ Begin APawn Interface.
 	virtual void PossessedBy(AController* NewController) override;
 	//~ End APawn Interface
@@ -46,6 +50,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Interact")
 	void Interact();
+
+	    UFUNCTION(BlueprintImplementableEvent, Category = "Interact")
+	    void BindInteractionEvents(AActor* Actor);
 
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "Name")
 	void SetNameTag();
