@@ -25,7 +25,8 @@ void USLMainMenuWidget::SetPlayerName()
     }
 }
 
-void USLMainMenuWidget::HandleOnEditableTextBoxCommittedEvent(const FText& Text, ETextCommit::Type CommitMethod)
+void USLMainMenuWidget::HandleOnEditableTextBoxCommittedEvent_Implementation(const FText& Text,
+    ETextCommit::Type CommitMethod)
 {
     SetPlayerName();
 }

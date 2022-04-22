@@ -27,15 +27,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* Enter;
 
-protected:
-
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerName();
 
 	    UFUNCTION(BlueprintImplementableEvent)
 	    void OnSetPlayerName();
 
-	UFUNCTION(BlueprintCallable)
+protected:
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void HandleOnEditableTextBoxCommittedEvent(const FText& Text, ETextCommit::Type CommitMethod);
 	
 };
