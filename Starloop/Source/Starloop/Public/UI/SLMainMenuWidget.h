@@ -31,7 +31,7 @@ public:
 	void SetPlayerName();
 
 	    UFUNCTION(BlueprintImplementableEvent)
-	    void OnSetPlayerName();
+	    void OnSetPlayerName(FName NewName);
 
 protected:
 

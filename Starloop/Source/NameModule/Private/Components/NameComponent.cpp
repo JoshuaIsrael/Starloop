@@ -3,7 +3,9 @@
 
 #include "Components/NameComponent.h"
 
+#include "Components/WidgetComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "UI/NameTagWidget.h"
 
 UNameComponent::UNameComponent()
 {
@@ -27,4 +29,19 @@ void UNameComponent::SetName(FName NewName)
     Name = NewName;
 
     OnSetName(NewName);
+}
+
+void UNameComponent::SetNameTag_Implementation()
+{
+    UWidgetComponent* WidgetComponent = GetOwner()->FindComponentByClass<UWidgetComponent>();
+
+    if(!WidgetComponent)
+    {
+        return;
+    }
+
+    if(UNameTagWidget* NameTagWidget = Cast<UNameTagWidget>(WidgetComponent->GetWidget()))
+    {
+        NameTagWidget->SetText(Name);
+    }
 }

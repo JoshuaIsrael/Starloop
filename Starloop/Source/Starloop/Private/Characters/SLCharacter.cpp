@@ -5,8 +5,10 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/NameComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerState.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -40,6 +42,15 @@ ASLCharacter::ASLCharacter()
 	// Create a name tag
 	NameTag = CreateDefaultSubobject<UWidgetComponent>(TEXT("NameTag"));
 	NameTag->SetupAttachment(GetMesh());
+
+	Name = CreateDefaultSubobject<UNameComponent>(TEXT("Name"));
+}
+
+void ASLCharacter::PossessedBy(AController* NewController)
+{
+    Super::PossessedBy(NewController);
+
+	GetWorld()->GetTimerManager().SetTimer(CacheTimer, this, &ASLCharacter::IsPlayerStateValid, 0.01f, true);
 }
 
 void ASLCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -83,3 +94,21 @@ void ASLCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+
+void ASLCharacter::SetNameTag_Implementation()
+{
+	Name->SetNameTag();
+}
+
+void ASLCharacter::IsPlayerStateValid()
+{
+	if(!IsValid(GetPlayerState()) || !CacheTimer.IsValid())
+	{
+	    return;
+	}
+
+	GetWorld()->GetTimerManager().ClearTimer(CacheTimer);
+
+	SetNameTag();
+}
+

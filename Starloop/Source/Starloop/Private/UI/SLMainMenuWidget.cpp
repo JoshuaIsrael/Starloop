@@ -17,11 +17,14 @@ void USLMainMenuWidget::OnConstruct_Implementation()
 
 void USLMainMenuWidget::SetPlayerName()
 {
-    if(UNameComponent* NameComponent = GetOwningPlayerState()->FindComponentByClass<UNameComponent>())
+    UNameComponent* NameComponent = GetOwningPlayerState()->FindComponentByClass<UNameComponent>();
+
+    // Update Player State's Name Component
+    if(NameComponent)
     {
         NameComponent->Server_SetName(FName(*Name->GetText().ToString()));
 
-        OnSetPlayerName();
+        OnSetPlayerName(NameComponent->GetName());
     }
 }
 

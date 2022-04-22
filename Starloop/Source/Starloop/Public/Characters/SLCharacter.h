@@ -6,9 +6,11 @@
 #include "GameFramework/Character.h"
 #include "SLCharacter.generated.h"
 
+class UNameComponent;
 class UWidgetComponent;
 class USpringArmComponent;
 class UCameraComponent;
+
 UCLASS()
 class STARLOOP_API ASLCharacter : public ACharacter
 {
@@ -18,6 +20,10 @@ public:
 
 	// Sets default values for this character's properties
 	ASLCharacter();
+
+	//~ Begin APawn Interface.
+	virtual void PossessedBy(AController* NewController) override;
+	//~ End APawn Interface
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -37,15 +43,27 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "Name")
+	void SetNameTag();
+
 	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* CameraBoom = nullptr;
 
 	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FollowCamera = nullptr;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UWidgetComponent* NameTag;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Name", meta = (AllowPrivateAccess = "true"))
+	UWidgetComponent* NameTag = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Name")
+	UNameComponent* Name = nullptr;
+
+private:
+
+	void IsPlayerStateValid();
+
+	FTimerHandle CacheTimer;
 
 };

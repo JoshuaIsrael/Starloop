@@ -20,21 +20,24 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	//~ End UObject Interface.
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Name")
 	FORCEINLINE FName GetName() const { return Name; }
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Name")
 	void Server_SetName(FName NewName);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Name")
 	void SetName(FName NewName);
 
-	    UFUNCTION(BlueprintImplementableEvent)
+	    UFUNCTION(BlueprintImplementableEvent, Category = "Name")
 	    void OnSetName(FName NewName);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Name")
+    void SetNameTag();
 
 protected:
 
-	UPROPERTY(Replicated, BlueprintReadOnly)
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Name")
 	FName Name = FName();
 
 };

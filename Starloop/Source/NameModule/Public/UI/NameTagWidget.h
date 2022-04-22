@@ -18,13 +18,13 @@ class NAMEMODULE_API UNameTagWidget : public UUserWidget
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget), Category = "Name")
 	UTextBlock* Name;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Name")
 	void SetText(FName NewText);
 
-	    UFUNCTION(BlueprintImplementableEvent)
+	    UFUNCTION(BlueprintImplementableEvent, Category = "Name")
 	    void OnSetText(FName NewText);
 	
 };
