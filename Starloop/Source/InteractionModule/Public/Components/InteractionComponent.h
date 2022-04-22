@@ -6,23 +6,39 @@
 #include "Components/ActorComponent.h"
 #include "InteractionComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INTERACTIONMODULE_API UInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
+public:
+
 	UInteractionComponent();
 
-protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(BlueprintCallable)
+	void Trace();
 
-		
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Interact")
+	void Server_Interact();
+
+	UFUNCTION(BlueprintCallable, Category = "Interact")
+	void Interact();
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Trace)
+	float LineTraceDistance;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Trace)
+	bool bShouldDebug;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Interact")
+	AActor* ActorToInteract;
+
+private:
+
+	FTimerHandle TraceTimer;
+
 };

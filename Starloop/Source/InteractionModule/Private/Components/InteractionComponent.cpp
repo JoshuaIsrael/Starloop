@@ -1,34 +1,73 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Components/InteractionComponent.h"
 
-// Sets default values for this component's properties
+#include "DrawDebugHelpers.h"
+#include "Libraries/InteractableInterface.h"
+
 UInteractionComponent::UInteractionComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-}
-
-
-// Called when the game starts
-void UInteractionComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
 	
 }
 
-
-// Called every frame
-void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UInteractionComponent::BeginPlay()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    Super::BeginPlay();
 
-	// ...
+    GetWorld()->GetTimerManager().SetTimer(TraceTimer, this, &UInteractionComponent::Trace, 0.05f, true);
 }
 
+void UInteractionComponent::Trace()
+{
+    FVector Start;
+	FVector End;
+
+	FVector PlayerEyesLoc;
+	FRotator PlayerEyesRot;
+
+	GetOwner()->GetActorEyesViewPoint(PlayerEyesLoc, PlayerEyesRot);
+
+	Start = PlayerEyesLoc;
+
+	End = PlayerEyesLoc + (PlayerEyesRot.Vector() * LineTraceDistance);
+	
+	FCollisionQueryParams TraceParams(FName(TEXT("InteractTrace")), true, NULL);
+	TraceParams.bTraceComplex = true;
+	TraceParams.bReturnPhysicalMaterial = true;
+
+	FHitResult HitResult = FHitResult(ForceInit);
+
+	bool bIsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, TraceParams);
+
+	if(bShouldDebug)
+	{
+		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5.f, ECC_WorldStatic, 1.f);
+	}
+
+	if (bIsHit)
+	{
+		ActorToInteract = HitResult.GetActor();
+	}
+    else
+	{
+		ActorToInteract = nullptr;
+	}
+}
+
+void UInteractionComponent::Server_Interact_Implementation()
+{
+	Interact();
+}
+
+void UInteractionComponent::Interact()
+{
+	if(!ActorToInteract)
+	{
+	    return;
+	}
+
+	if(ActorToInteract->GetClass()->ImplementsInterface(UInteractableInterface::StaticClass()))
+	{
+		IInteractableInterface::Execute_OnInteract(ActorToInteract);
+	}
+}

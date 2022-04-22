@@ -5,6 +5,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/InteractionComponent.h"
 #include "Components/NameComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -44,6 +45,8 @@ ASLCharacter::ASLCharacter()
 	NameTag->SetupAttachment(GetMesh());
 
 	Name = CreateDefaultSubobject<UNameComponent>(TEXT("Name"));
+
+	Interaction = CreateDefaultSubobject<UInteractionComponent>(TEXT("Interaction")); 
 }
 
 void ASLCharacter::PossessedBy(AController* NewController)
@@ -64,6 +67,8 @@ void ASLCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ASLCharacter::Interact);
 }
 
 void ASLCharacter::MoveForward(float Value)
@@ -93,6 +98,11 @@ void ASLCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void ASLCharacter::Interact()
+{
+	Interaction->Server_Interact();
 }
 
 void ASLCharacter::SetNameTag_Implementation()

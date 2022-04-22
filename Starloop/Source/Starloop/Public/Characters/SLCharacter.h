@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "SLCharacter.generated.h"
 
+class UInteractionComponent;
 class UNameComponent;
 class UWidgetComponent;
 class USpringArmComponent;
@@ -43,22 +44,28 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
+	UFUNCTION(BlueprintCallable, Category = "Interact")
+	void Interact();
+
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "Name")
 	void SetNameTag();
 
 	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	USpringArmComponent* CameraBoom = nullptr;
 
 	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* FollowCamera = nullptr;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Name", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Name")
 	UWidgetComponent* NameTag = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Name")
 	UNameComponent* Name = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Name")
+	UInteractionComponent* Interaction = nullptr;
 
 private:
 
